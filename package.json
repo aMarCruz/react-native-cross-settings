@@ -8,6 +8,11 @@
   "scripts": {
     "test": "echo Ops!"
   },
+  "homepage": "https://github.com/aMarCruz/react-native-cross-settings",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aMarCruz/react-native-cross-settings.git"
+  },
   "peerDependencies": {
     "react-native": ">=0.50.0"
   },
