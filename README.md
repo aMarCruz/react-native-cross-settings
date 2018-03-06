@@ -20,35 +20,33 @@ $ react-native link react-native-cross-settings
 ## Usage
 
 ```js
-import Settings from 'react-native-cross-settings'
+import Settings from 'react-native-cross-settings';
 
-// Set a listener
+// Set a listener. It will be called for *each* value that has changed.
 const watchId = Settings.watchKeys('strvar', () => {
-  console.log('strvar changed.')
-})
+  console.log('strvar changed.');
+});
 
-console.log('restored setting:', Settings.get('strvar', '?'))
-// => "?"
+console.log('restored setting:', Settings.get('strvar'));
+// => undefined
 
-// Store a value
-Settings.set('strvar', 'First setting')
-console.log('new setting:', Settings.get('strvar', '?'))
+// Store a value (only string, number, or boolean)
+Settings.set({ strvar: 'First setting' });
+console.log('new setting:', Settings.get('strvar'));
 // => "First setting"
 
-// Remove value
-Settings.set('strvar', null)
-console.log('new setting:', Settings.get('strvar', '?'))
-// => "?"
+// Cannot remove a value, but you can set it to `null`.
+// Next time you App start, the value will be undefined.
+Settings.set({ strvar: null });
+console.log('new setting:', Settings.get('strvar'));
+// => null
 
-// Store another value, this will be preserved across sessions.
-Settings.set('strvar', null)
-console.log('new setting:', Settings.get('strvar', '?'))
-// => "?"
+// Store a new value, this will be preserved across sessions.
+Settings.set({ strvar: 'final value' });
 
+// => Don't forget to remove the listener
 Settings.clearWatch(watchId)
 ```
-
-
 
 ## API
 
@@ -72,7 +70,9 @@ See React Native [Settings](https://facebook.github.io/react-native/docs/setting
 
 In Android, valid value types to store are `boolean`, `string`, and `number`.
 
-If you pass `null` as value, the key is removed.
+If you pass `null` as value, the key will be removed in the next session.
+
+PRs and stars are welcome ;)
 
 ## License
 
