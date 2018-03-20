@@ -25,7 +25,6 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
     private static final String CHANGED_EVENT = "settings_updated";
 
     private ReactApplicationContext mReactContext;
-    private SharedPreferences mSettings;
 
     RNSettingsModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -35,13 +34,14 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
 
     @Override
     public void initialize() {
-        mSettings = mReactContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        mSettings.registerOnSharedPreferenceChangeListener(listener);
+        final SharedPreferences prefs = getPreferences();
+        prefs.registerOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
     public void onCatalystInstanceDestroy() {
-        mSettings.unregisterOnSharedPreferenceChangeListener(listener);
+        final SharedPreferences prefs = getPreferences();
+        prefs.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
@@ -51,9 +51,9 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
 
     @Override
     public Map<String, Object> getConstants() {
-        mSettings = mReactContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        Map<String, Object> constants = new HashMap<>();
-        Map<String, ?> settings = mSettings.getAll();
+        final SharedPreferences prefs = getPreferences();
+        final Map<String, Object> constants = new HashMap<>();
+        final Map<String, ?> settings = prefs.getAll();
 
         constants.put("CHANGED_EVENT", CHANGED_EVENT);
 
@@ -67,10 +67,8 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
     /*
         Supported mapped types: Boolean -> boolean, Float -> number, String -> string
      */
-    private static Map<String, Object> makeMap(Map<String, ?> src) {
-        Map<String, Object> map = new HashMap<>();
-
-        Log.i(TAG, "Loading settings from file.");
+    private static Map<String, Object> makeMap(final Map<String, ?> src) {
+        final Map<String, Object> map = new HashMap<>();
 
         for (Map.Entry<String, ?> entry : src.entrySet()) {
             final String key = entry.getKey();
@@ -79,15 +77,15 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
             try {
                 if (value != null && (
                     value instanceof Boolean ||
-                        value instanceof Integer ||
-                        value instanceof Long ||
-                        value instanceof Float ||
-                        value instanceof String
+                    value instanceof Integer ||
+                    value instanceof Long ||
+                    value instanceof Float ||
+                    value instanceof String
                 )) {
                     map.put(key, value);
                 }
             } catch (Exception e) {
-                Log.d(TAG, "Reading setting " + key + " generates error.");
+                Log.e(TAG, "Reading setting " + key + " generates error.");
                 e.printStackTrace();
             }
         }
@@ -101,20 +99,19 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setValues(final ReadableMap map) {
 
-        Log.i(TAG, "In setValues()");
         if (map == null) {
             return;
         }
 
-        ReadableMapKeySetIterator iterator = map.keySetIterator();
-        SharedPreferences.Editor editor = mSettings.edit();
+        final ReadableMapKeySetIterator iterator = map.keySetIterator();
+        final SharedPreferences prefs = getPreferences();
+        final SharedPreferences.Editor editor = prefs.edit();
 
         try {
             while (iterator.hasNextKey()) {
                 String key = iterator.nextKey();
                 ReadableType type = map.getType(key);
 
-                Log.i(TAG, "Converting setting: " + key);
                 switch (type) {
                     case Null:
                         editor.remove(key);
@@ -135,7 +132,7 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
             editor.apply();
 
         } catch (Exception e) {
-            Log.d(TAG, "Converting settings generates error.");
+            Log.e(TAG, "Converting settings generates error.");
             e.printStackTrace();
         }
     }
@@ -151,7 +148,6 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
                 Log.d(TAG, "Error: Cannot get RCTDeviceEventEmitter instance.");
                 return;
             }
-            Log.i(TAG, "Detected change in preference " + key);
 
             // Sorry, there's only 3 valid types, use brute force
             if (pref.contains(key)) {
@@ -182,4 +178,7 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
         }
     };
 
+    private SharedPreferences getPreferences() {
+        return mReactContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+    }
 }
