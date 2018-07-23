@@ -1,0 +1,9 @@
+.idea
+.gradle
+local.properties
+*.iml
+*.log
+*.bak
+build/
+test/
+.vscode/

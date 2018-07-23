@@ -22,7 +22,7 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
 
     private static final String TAG = "RNSettings";
     private static final String PREFS_NAME = "RNSettrinsPrefsFile";
-    private static final String CHANGED_EVENT = "settings_updated";
+    private static final String CHANGED_EVENT = "settingsUpdated";
 
     private ReactApplicationContext mReactContext;
 
@@ -55,11 +55,7 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
         final Map<String, Object> constants = new HashMap<>();
         final Map<String, ?> settings = prefs.getAll();
 
-        constants.put("CHANGED_EVENT", CHANGED_EVENT);
-
-        if (settings != null) {
-            constants.put("settings", makeMap(settings));
-        }
+        constants.put("settings", makeMap(settings));
 
         return constants;
     }
@@ -70,23 +66,30 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
     private static Map<String, Object> makeMap(final Map<String, ?> src) {
         final Map<String, Object> map = new HashMap<>();
 
-        for (Map.Entry<String, ?> entry : src.entrySet()) {
-            final String key = entry.getKey();
-            final Object value = entry.getValue();
+        if (src != null) {
+            for (Map.Entry<String, ?> entry : src.entrySet()) {
+                final String key = entry.getKey();
+                final Object value = entry.getValue();
 
-            try {
-                if (value != null && (
-                    value instanceof Boolean ||
-                    value instanceof Integer ||
-                    value instanceof Long ||
-                    value instanceof Float ||
-                    value instanceof String
-                )) {
-                    map.put(key, value);
+                if (value == null) {
+                    continue;
                 }
-            } catch (Exception e) {
-                Log.e(TAG, "Reading setting " + key + " generates error.");
-                e.printStackTrace();
+
+                try {
+                    if (value instanceof Long) {
+                        map.put(key, Double.longBitsToDouble((long) value));
+                    } else if ((
+                        value instanceof Boolean ||
+                        value instanceof Integer ||
+                        value instanceof Float || /* keep this for compatibility */
+                        value instanceof String
+                    )) {
+                        map.put(key, value);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Reading setting " + key + " generates error.");
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -120,8 +123,7 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
                         editor.putBoolean(key, map.getBoolean(key));
                         break;
                     case Number:
-                        // Can be int or double.
-                        editor.putFloat(key, (float) map.getDouble(key));
+                        storeNumber(editor, key, map.getDouble(key));
                         break;
                     case String:
                         editor.putString(key, map.getString(key));
@@ -134,6 +136,21 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
         } catch (Exception e) {
             Log.e(TAG, "Converting settings generates error.");
             e.printStackTrace();
+        }
+    }
+
+    /*
+      RN ReadableMap has no a `getLong` method, so type Long is used with `doubleToRawLongBits`
+      for storing Double values, as SharedPreferences.Editor has no `putDouble`.
+    */
+    private void storeNumber(final SharedPreferences.Editor editor, final String key, final double number) {
+        // Can be long, float, or double.
+        if (number == (int) number || Double.isNaN(number)) {
+            Log.e(TAG, "Saving " + key + " as int.");
+            editor.putInt(key, (int) number);
+        } else {
+            Log.e(TAG, "Saving " + key + " as double.");
+            editor.putLong(key, Double.doubleToRawLongBits(number));
         }
     }
 
@@ -156,10 +173,15 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
                     map.putString(key, str);
                 } catch (ClassCastException e1) {
                     try {
-                        Double num = (double) pref.getFloat(key, 0f);
-                        map.putDouble(key, num);
+                        int num = pref.getInt(key, 0);
+                        map.putInt(key, num);
                     } catch (ClassCastException e2) {
-                        map.putBoolean(key, pref.getBoolean(key, false));
+                        try {
+                            map.putBoolean(key, pref.getBoolean(key, false));
+                        } catch (ClassCastException e3) {
+                            long bits = pref.getLong(key, 0L);
+                            map.putDouble(key, Double.longBitsToDouble(bits));
+                        }
                     }
                 } catch (Exception e) {
                     ok = false;

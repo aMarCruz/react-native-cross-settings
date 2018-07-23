@@ -1,0 +1,14 @@
+// @flow
+
+export type RNSettingsTypes = boolean | string | number | null;
+export type RNSettingsSet = { [key: string]: RNSettingsTypes };
+
+declare interface RNSettings {
+  get(key: string): RNSettingsTypes;
+  set(settings: RNSettingsSet): void;
+  watchKeys(keys: string | Array<string>, watcher: () => any): number;
+  clearWatch(watchId: number): void;
+}
+
+declare var Settings: RNSettings;
+export default Settings;
