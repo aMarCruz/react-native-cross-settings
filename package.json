@@ -9,6 +9,9 @@
     "test": "echo Ops!"
   },
   "homepage": "https://github.com/aMarCruz/react-native-cross-settings",
+  "bugs": {
+    "url": "https://github.com/aMarCruz/react-native-cross-settings/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/aMarCruz/react-native-cross-settings.git"
