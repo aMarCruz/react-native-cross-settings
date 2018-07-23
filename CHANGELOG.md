@@ -1,5 +1,8 @@
 ## react-native-cross-settings changes
 
+### 2018-03-19 v1.0.1
+- Add missing google repository (for development).
+
 ### 2018-03-19 v1.0.0
 
 - Flow types added (not sure if correctly).

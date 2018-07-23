@@ -106,7 +106,7 @@ const myArray = JSON.parse(Settings.get('myArray') || '[]')
 
 ## TODO
 
-[ ] Support Array
+- [ ] Support Array
 
 ## License
 
