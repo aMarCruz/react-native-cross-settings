@@ -97,12 +97,9 @@ Settings.set({ myArray: JSON.stringify([1,2,3]) })
 const myArray = JSON.parse(Settings.get('myArray') || '[]')
 ```
 
-## Changes in v1.0
+## Changes in v1.0.2
 
-- Flow types added (not sure if correctly).
-- Better support for `long` & `double` values (the range of `long` is still limited by the RN Bridge).
-- Remove react-native from peerDependencies, since this library must work in versions prior to 0.50.
-- The default `buildToolsVersion` was changed 26.0.3 and `compileSdkVersion`/`targetSdkVersion` to 26.
+- Fixed: The callback of `watchKeys` is not called.
 
 ## TODO
 
