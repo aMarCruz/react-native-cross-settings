@@ -110,7 +110,7 @@ const myArray = JSON.parse(Settings.get('myArray') || '[]')
 
 ## License
 
-The [MIT License](LICENCE) (MIT)
+The [MIT License](LICENSE) (MIT)
 
 PRs and stars are welcome ;)
 

@@ -14,7 +14,7 @@ const RCTSettingsManager = require('react-native').NativeModules.RNSettings;
 
 const invariant = require('invariant');
 
-const subscriptions = []
+const subscriptions = [];
 
 const Settings = {
   _settings: RCTSettingsManager.settings,
@@ -51,17 +51,11 @@ const Settings = {
 
   _sendObservations(body) {
     Object.keys(body).forEach((key) => {
-      const newValue = body[key];
-      const didChange = this._settings[key] !== newValue;
-
-      if (didChange) {
-        this._settings[key] = newValue;
-        subscriptions.forEach((sub) => {
-          if (sub.callback && sub.keys.indexOf(key) !== -1) {
-            sub.callback();
-          }
-        });
-      }
+      subscriptions.forEach((sub) => {
+        if (sub.callback && sub.keys.indexOf(key) !== -1) {
+          sub.callback();
+        }
+      });
     });
   },
 };

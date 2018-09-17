@@ -1,16 +1,29 @@
-## react-native-cross-settings changes
+# react-native-cross-settings changes
 
-### 2018-03-19 v1.0.1
-- Add missing google repository (for development).
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-### 2018-03-19 v1.0.0
+## [Unreleased]
+### Changed
+- The changelog follows the format on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+- Simplifies the reading of variables in android/build.gradle
 
-- Flow types added (not sure if correctly).
-- Better support for `long` & `double` values (the range of `long` is still limited by the RN Bridge).
-- Remove react-native from peerDependencies, since this library must work in versions prior to 0.50.
+### Fixed
+- The callback of `watchKeys` is not called.
+
+## [1.0.1] - 2018-03-19
+### Fixed
+- Missing google repository in android/gradle (for development).
+
+## [1.0.0] - 2018-03-19
+### Added
+- Flow types (not sure if correctly).
+### Changed
 - The default `buildToolsVersion` was changed 26.0.3 and `compileSdkVersion`/`targetSdkVersion` to 26.
+- Better support for `long` & `double` values (the range of `long` is still limited by the RN Bridge).
+### Removed
+- react-native from peerDependencies, since this library must work in versions prior to 0.50.
 
-### 2018-03-19 v0.2.0
-
+## [0.2.0] 2018-03-19
+### Changed
 - Changed minSdkVersion version to 16 - Thanks to @wayne1203
 - The preferences file is openning only when used.
