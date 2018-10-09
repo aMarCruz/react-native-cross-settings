@@ -1,10 +1,20 @@
 {
   "name": "react-native-cross-settings",
   "description": "React Native `Settings` module for both Android & iOS.",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "license": "MIT",
   "main": "./index.js",
   "typings": "./index.d.ts",
+  "keywords": [
+    "react-native",
+    "settings",
+    "javascript",
+    "typescript",
+    "preferences",
+    "prefs",
+    "android",
+    "ios"
+  ],
   "scripts": {
     "test": "echo Ops!"
   },
@@ -18,5 +28,8 @@
   },
   "dependencies": {
     "invariant": "^2.2.3"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.55.0"
   }
 }

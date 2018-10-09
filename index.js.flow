@@ -6,7 +6,7 @@ export type RNSettingsSet = { [key: string]: RNSettingsTypes };
 declare interface RNSettings {
   get(key: string): RNSettingsTypes;
   set(settings: RNSettingsSet): void;
-  watchKeys(keys: string | Array<string>, watcher: () => any): number;
+  watchKeys(keys: string | Array<string>, watcher: () => void): number;
   clearWatch(watchId: number): void;
 }
 

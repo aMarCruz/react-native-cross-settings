@@ -51,11 +51,10 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
 
     @Override
     public Map<String, Object> getConstants() {
-        final SharedPreferences prefs = getPreferences();
         final Map<String, Object> constants = new HashMap<>();
-        final Map<String, ?> settings = prefs.getAll();
+        final SharedPreferences prefs = getPreferences();
 
-        constants.put("settings", makeMap(settings));
+        constants.put("settings", makeMap(prefs.getAll()));
 
         return constants;
     }
@@ -146,10 +145,10 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
     private void storeNumber(final SharedPreferences.Editor editor, final String key, final double number) {
         // Can be long, float, or double.
         if (number == (int) number || Double.isNaN(number)) {
-            Log.e(TAG, "Saving " + key + " as int.");
+            Log.v(TAG, "Saving " + key + " as int.");
             editor.putInt(key, (int) number);
         } else {
-            Log.e(TAG, "Saving " + key + " as double.");
+            Log.v(TAG, "Saving " + key + " as double.");
             editor.putLong(key, Double.doubleToRawLongBits(number));
         }
     }
@@ -158,8 +157,8 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
 
         public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
             WritableMap map = Arguments.createMap();
-            Boolean ok = true;
             RCTDeviceEventEmitter emitter = mReactContext.getJSModule(RCTDeviceEventEmitter.class);
+            boolean ok = true;
 
             if (emitter == null) {
                 Log.d(TAG, "Error: Cannot get RCTDeviceEventEmitter instance.");

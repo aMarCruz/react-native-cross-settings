@@ -16,14 +16,38 @@ const invariant = require('invariant');
 
 const subscriptions = [];
 
+const checkValues = (obj) => {
+  const keys = Object.keys(obj)
+
+  // classic for() is fastest
+  for (let i = 0; i < keys.length; i++) {
+    const value = obj[keys[i]]
+    const type = typeof value
+
+    if (value != null && type != 'string' && type != 'number' && type != 'boolean') {
+      return false
+    }
+  }
+
+  return true
+}
+
 const Settings = {
   _settings: RCTSettingsManager.settings,
+
+  getAll() {
+    return this._settings
+  },
 
   get(key) {
     return this._settings[key];
   },
 
   set(settings) {
+    invariant(
+      checkValues(settings),
+      'Settings for Android only supports number, string and boolean.'
+    )
     this._settings = Object.assign(this._settings, settings);
     RCTSettingsManager.setValues(settings);
   },
