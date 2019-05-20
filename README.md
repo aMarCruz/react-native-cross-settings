@@ -7,10 +7,9 @@ React Native `Settings` module for both Android & iOS.
 
 If this library has helped you, don't forget to give it a star :star2:
 
-## IMPORTANT
+## Important
 
-v2.0 works with Gradle 4.4, the default in React Native 0.57. If you are using Gradle 3.x please use react-native-cross-settings 1.0.2
-
+v2.1.0 works with Gradle 4.10.x, the default in React Native 0.58. If you are using Gradle 3.x please use react-native-cross-settings 1.0.2
 
 ## Setup
 
@@ -101,17 +100,17 @@ Settings.set({ myArray: JSON.stringify([1,2,3]) })
 const myArray = JSON.parse(Settings.get('myArray') || '[]')
 ```
 
-
 ## Support my Work
 
 I'm a full-stack developer with more than 20 year of experience and I try to share most of my work for free and help others, but this takes a significant amount of time and effort so, if you like my work, please consider...
 
-[![Buy me a Coffee][bmc-image]][bmc-url]
+<!-- markdownlint-disable MD033 -->
+[<img src="https://amarcruz.github.io/images/kofi_blue.png" height="36" title="Support Me on Ko-fi" />][kofi-url]
+<!-- markdownlint-enable MD033 -->
 
-Feedback, PRs stars, and smiles are also welcome :)
+Of course, feedback, PRs, and stars are also welcome 🙃
 
 Thanks for your support!
-
 
 ## License
 
@@ -122,4 +121,4 @@ The [MIT License](LICENSE) (MIT)
 [license-image]:  https://img.shields.io/npm/l/express.svg
 [license-url]:    https://github.com/aMarCruz/react-native-cross-settings/blob/master/LICENSE
 [bmc-image]:      https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png
-[bmc-url]:        https://www.buymeacoffee.com/aMarCruz
+[kofi-url]:       https://ko-fi.com/C0C7LF7I

@@ -3,16 +3,16 @@ import groovy.json.JsonSlurper
 
 // dynamically retrieve version from package.json
 def getPackageVersion() {
-    return new JsonSlurper().parse(file('../package.json'), 'utf-8').version
+    new JsonSlurper().parse(file('../package.json'), 'utf-8').version
 }
 
 def getExtValue(prop, fallback) {
-    return rootProject.ext.hasProperty(prop) ? rootProject.ext.get(prop) : fallback
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
-def _buildToolsVersion  = getExtValue('buildToolsVersion', '27.0.3')
-def _compileSdkVersion  = getExtValue('compileSdkVersion', 27)
-def _targetSdkVersion   = getExtValue('targetSdkVersion', 27)
+def _buildToolsVersion  = getExtValue('buildToolsVersion', '28.0.3')
+def _compileSdkVersion  = getExtValue('compileSdkVersion', 28)
+def _targetSdkVersion   = getExtValue('targetSdkVersion', 28)
 def _minSdkVersion      = getExtValue('minSdkVersion', 16)
 
 buildscript {
@@ -25,7 +25,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.android.tools.build:gradle:3.3.1'
     }
 }
 
@@ -38,15 +38,15 @@ android {
     defaultConfig {
         minSdkVersion _minSdkVersion
         targetSdkVersion _targetSdkVersion
-        versionCode 2
+        versionCode 3
         versionName getPackageVersion()
     }
     lintOptions {
         abortOnError false
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

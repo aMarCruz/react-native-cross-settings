@@ -16,6 +16,10 @@ const invariant = require('invariant');
 
 const subscriptions = [];
 
+const isObject = (obj) => {
+  return obj && typeof obj === 'object' && !Array.isArray(obj) && !(obj instanceof Date)
+}
+
 const checkValues = (obj) => {
   const keys = Object.keys(obj)
 
@@ -44,6 +48,10 @@ const Settings = {
   },
 
   set(settings) {
+    invariant(
+      isObject(settings),
+      'Settings for Android expect a plain JavaScript object.'
+    )
     invariant(
       checkValues(settings),
       'Settings for Android only supports number, string and boolean.'

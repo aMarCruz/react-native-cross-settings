@@ -145,10 +145,8 @@ class RNSettingsModule extends ReactContextBaseJavaModule {
     private void storeNumber(final SharedPreferences.Editor editor, final String key, final double number) {
         // Can be long, float, or double.
         if (number == (int) number || Double.isNaN(number)) {
-            Log.v(TAG, "Saving " + key + " as int.");
             editor.putInt(key, (int) number);
         } else {
-            Log.v(TAG, "Saving " + key + " as double.");
             editor.putLong(key, Double.doubleToRawLongBits(number));
         }
     }
